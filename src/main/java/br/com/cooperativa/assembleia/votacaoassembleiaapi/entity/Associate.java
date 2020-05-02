@@ -1,17 +1,16 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.entity;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 
 public class Associate {
     @Id
     private String id;
     private String name;
+    @Version
+    private Long version;
 
     public Associate() {
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -28,11 +27,11 @@ public class Associate {
 
     @Override
     public String toString() {
-        return "Associado{" +
+        return "Associate{" +
                 "id='" + id + '\'' +
-                ", nome='" + name + '\'' +
+                ", name='" + name + '\'' +
+                ", version=" + version +
                 '}';
     }
 
-    // TODO: Equals and HashCode
 }
