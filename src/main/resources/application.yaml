@@ -1,0 +1,5 @@
+spring:
+  data:
+    mongodb:
+      database: votacao-pauta
+      host: localhost:27017

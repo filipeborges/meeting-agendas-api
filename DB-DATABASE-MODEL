@@ -1,0 +1,19 @@
+Associate {
+    _Id: <ObjectId>,
+    name: <string>
+}
+
+Pauta {
+    _Id: <ObjectId>,
+    name: <string>,
+    description: <string>,
+    session_started_in: <long>,
+    session_duration: <long>,
+    num_accepted: <number>,
+    num_rejected: <number>,
+    result: <string>,
+    votes: [{
+        associate_id: <ObjectId>,
+        value: <'S' | 'N'>
+    }]
+}
