@@ -1,7 +1,7 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.controller;
 
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateDto;
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.Associate;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.AssociateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,29 +21,29 @@ public class AssociateController extends AbstractController {
     private AssociateService associateService;
 
     @GetMapping
-    public ResponseEntity<List<Associate>> retrieveAll() {
+    public ResponseEntity<List<AssociateDto>> retrieveAll() {
         return ResponseEntity.ok(associateService.getAll());
     }
 
     @PostMapping
-    public ResponseEntity<Associate> newAssociate(@RequestBody @Valid AssociateDto associateDto) {
-        Associate newAssociate = associateService.create(associateDto);
+    public ResponseEntity<AssociateDto> newAssociate(@RequestBody @Valid AssociateForm associateForm) {
+        AssociateDto newAssociate = associateService.create(associateForm);
         return ResponseEntity
                 .created(buildNewResourceUri(newAssociate.getId()))
                 .body(newAssociate);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Associate> oneAssociate(@PathVariable @NotBlank String id) {
+    public ResponseEntity<AssociateDto> oneAssociate(@PathVariable @NotBlank String id) {
         return ResponseEntity.ok(associateService.findOne(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Associate> replaceAssociate(
-            @RequestBody @Valid AssociateDto associateDto,
+    public ResponseEntity<AssociateDto> replaceAssociate(
+            @RequestBody @Valid AssociateForm associateForm,
             @PathVariable @NotBlank String id
     ) {
-        return ResponseEntity.ok(associateService.update(associateDto, id));
+        return ResponseEntity.ok(associateService.update(associateForm, id));
     }
 
     @Override

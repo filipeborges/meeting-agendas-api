@@ -1,20 +1,21 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.service;
 
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateDto;
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.Associate;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateForm;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface AssociateService {
 
-    Associate create(@Valid AssociateDto associateDto);
+    AssociateDto create(@NotNull @Valid AssociateForm associateForm);
 
-    List<Associate> getAll();
+    List<AssociateDto> getAll();
 
-    Associate findOne(@NotBlank String id);
+    AssociateDto findOne(@NotBlank String id);
 
-    Associate update(@Valid AssociateDto associateDto, @NotBlank String id);
+    AssociateDto update(@NotNull @Valid AssociateForm associateForm, @NotBlank String id);
 
 }

@@ -2,16 +2,17 @@ package br.com.cooperativa.assembleia.votacaoassembleiaapi.service.impl;
 
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.converter.AssociateConverter;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateDto;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.Associate;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.ResourceNotFoundException;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.repository.AssociateRepository;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.AssociateService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
@@ -20,33 +21,38 @@ public class AssociateServiceImpl implements AssociateService {
 
     private static final String RESOURCE_NAME = "associate";
 
-    @Autowired
-    private AssociateRepository associateRepository;
+    private final AssociateRepository associateRepository;
+    private final AssociateConverter associateConverter;
 
-    @Autowired
-    private AssociateConverter associateConverter;
-
-    @Override
-    public Associate create(@Valid AssociateDto associateDto) {
-        return associateRepository.save(associateConverter.entityFromDto(associateDto));
+    public AssociateServiceImpl(AssociateRepository associateRepository, AssociateConverter associateConverter) {
+        this.associateRepository = associateRepository;
+        this.associateConverter = associateConverter;
     }
 
     @Override
-    public List<Associate> getAll() {
-        return associateRepository.findAll();
+    public AssociateDto create(@NotNull @Valid AssociateForm associateForm) {
+        return associateConverter.dtoFromEntity(
+                associateRepository.save(associateConverter.entityFromForm(associateForm))
+        );
     }
 
     @Override
-    public Associate findOne(@NotBlank String id) {
-        return associateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, id));
+    public List<AssociateDto> getAll() {
+        return associateConverter.listDtoFromListEntity(associateRepository.findAll());
     }
 
     @Override
-    public Associate update(@Valid AssociateDto associateDto, @NotBlank String id) {
+    public AssociateDto findOne(@NotBlank String id) {
         Associate associate = associateRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, id));
-        associate.setName(associateDto.getName()); // TODO: Builder Method
-        return associateRepository.save(associate);
+        return associateConverter.dtoFromEntity(associate);
+    }
+
+    @Override
+    public AssociateDto update(@NotNull @Valid AssociateForm associateForm, @NotBlank String id) {
+        Associate associate = associateRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, id));
+        associate.setName(associateForm.getName());
+        return associateConverter.dtoFromEntity(associateRepository.save(associate));
     }
 }
