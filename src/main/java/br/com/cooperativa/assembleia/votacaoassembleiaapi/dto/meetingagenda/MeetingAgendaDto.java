@@ -6,21 +6,21 @@ public class MeetingAgendaDto {
     private String id;
     private String name;
     private String description;
-    private Long sessionStartedIn;
-    private Long sessionIntervalDuration;
+    private Long sessionStartedInMs;
+    private Long sessionIntervalDurationMs;
     private Long acceptedVotes;
     private Long rejectedVotes;
     private String result;
     private List<VoteDto> votes;
 
-    public MeetingAgendaDto(String id, String name, String description, Long sessionStartedIn,
-                            Long sessionIntervalDuration, Long acceptedVotes, Long rejectedVotes,
+    public MeetingAgendaDto(String id, String name, String description, Long sessionStartedInMs,
+                            Long sessionIntervalDurationMs, Long acceptedVotes, Long rejectedVotes,
                             String result, List<VoteDto> votes) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.sessionStartedIn = sessionStartedIn;
-        this.sessionIntervalDuration = sessionIntervalDuration;
+        this.sessionStartedInMs = sessionStartedInMs;
+        this.sessionIntervalDurationMs = sessionIntervalDurationMs;
         this.acceptedVotes = acceptedVotes;
         this.rejectedVotes = rejectedVotes;
         this.result = result;
@@ -43,20 +43,20 @@ public class MeetingAgendaDto {
         this.description = description;
     }
 
-    public Long getSessionStartedIn() {
-        return sessionStartedIn;
+    public Long getSessionStartedInMs() {
+        return sessionStartedInMs;
     }
 
-    public void setSessionStartedIn(Long sessionStartedIn) {
-        this.sessionStartedIn = sessionStartedIn;
+    public void setSessionStartedInMs(Long sessionStartedInMs) {
+        this.sessionStartedInMs = sessionStartedInMs;
     }
 
-    public Long getSessionIntervalDuration() {
-        return sessionIntervalDuration;
+    public Long getSessionIntervalDurationMs() {
+        return sessionIntervalDurationMs;
     }
 
-    public void setSessionIntervalDuration(Long sessionIntervalDuration) {
-        this.sessionIntervalDuration = sessionIntervalDuration;
+    public void setSessionIntervalDurationMs(Long sessionIntervalDurationMs) {
+        this.sessionIntervalDurationMs = sessionIntervalDurationMs;
     }
 
     public Long getAcceptedVotes() {
@@ -105,8 +105,8 @@ public class MeetingAgendaDto {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", sessionStartedIn=" + sessionStartedIn +
-                ", sessionIntervalDuration=" + sessionIntervalDuration +
+                ", sessionStartedIn=" + sessionStartedInMs +
+                ", sessionIntervalDuration=" + sessionIntervalDurationMs +
                 ", acceptedVotes=" + acceptedVotes +
                 ", rejectedVotes=" + rejectedVotes +
                 ", result='" + result + '\'' +

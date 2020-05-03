@@ -2,6 +2,7 @@ package br.com.cooperativa.assembleia.votacaoassembleiaapi.controller;
 
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaDto;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaForm;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaStartSessionForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,14 @@ public class MeetingAgendaController extends AbstractController {
             @PathVariable @NotBlank String id
     ) {
         return ResponseEntity.ok(meetingAgendaService.findOne(id));
+    }
+
+    @PatchMapping("/{id}/start-session")
+    public ResponseEntity<MeetingAgendaDto> startMeetingAgendaSession(
+            @RequestBody(required = false) @Valid MeetingAgendaStartSessionForm meetingAgendaStartSessionForm,
+            @PathVariable @NotBlank String id
+            ) {
+        return ResponseEntity.ok(meetingAgendaService.startSession(meetingAgendaStartSessionForm, id));
     }
 
     @Override
