@@ -4,7 +4,9 @@ import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.Associat
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaDto;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaStartSessionForm;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.VoteDto;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaService;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.VoteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -26,6 +28,9 @@ public class MeetingAgendaController extends AbstractController {
 
     @Autowired
     private MeetingAgendaService meetingAgendaService;
+
+    @Autowired
+    private VoteService voteService;
 
     @GetMapping
     @ApiOperation(
@@ -85,6 +90,15 @@ public class MeetingAgendaController extends AbstractController {
             @PathVariable @NotBlank String id
             ) {
         return ResponseEntity.ok(meetingAgendaService.startSession(meetingAgendaStartSessionForm, id));
+    }
+
+    // ============================= VOTES SUB RESOURCE =========================================== //
+
+    @GetMapping("/{id}/votes/")
+    public ResponseEntity<List<VoteDto>> retrieveAllVotesFromMeetingAgenda(
+            @PathVariable("id") @NotBlank String meetingAgendaId
+    ) {
+        return ResponseEntity.ok(voteService.getAll(meetingAgendaId));
     }
 
     @Override
