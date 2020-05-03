@@ -11,6 +11,10 @@ public class AssociateForm {
     public AssociateForm() {
     }
 
+    public AssociateForm(@NotBlank @Size(max = 200) String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

@@ -12,16 +12,19 @@ import java.util.stream.Collectors;
 public class AssociateConverter {
 
     public Associate entityFromForm(AssociateForm associateForm) {
+        if (associateForm == null) return null;
         Associate associate = new Associate();
         associate.setName(associateForm.getName());
         return associate;
     }
 
     public AssociateDto dtoFromEntity(Associate associate) {
+        if (associate == null) return null;
         return new AssociateDto(associate.getId(), associate.getName());
     }
 
     public List<AssociateDto> listDtoFromListEntity(List<Associate> associates) {
+        if (associates == null) return null;
         return associates
                 .stream()
                 .map(

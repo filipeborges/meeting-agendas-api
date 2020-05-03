@@ -13,6 +13,10 @@ public class Associate {
     public Associate() {
     }
 
+    public Associate(String name) {
+        this.name = name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
