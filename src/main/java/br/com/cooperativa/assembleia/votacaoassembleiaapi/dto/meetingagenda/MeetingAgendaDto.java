@@ -3,6 +3,7 @@ package br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda;
 import java.util.List;
 
 public class MeetingAgendaDto {
+    private String id;
     private String name;
     private String description;
     private Long sessionStartedIn;
@@ -12,8 +13,10 @@ public class MeetingAgendaDto {
     private String result;
     private List<VoteDto> votes;
 
-    public MeetingAgendaDto(String name, String description, Long sessionStartedIn, Long sessionIntervalDuration,
-                            Long acceptedVotes, Long rejectedVotes, String result, List<VoteDto> votes) {
+    public MeetingAgendaDto(String id, String name, String description, Long sessionStartedIn,
+                            Long sessionIntervalDuration, Long acceptedVotes, Long rejectedVotes,
+                            String result, List<VoteDto> votes) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.sessionStartedIn = sessionStartedIn;
@@ -88,10 +91,19 @@ public class MeetingAgendaDto {
         this.votes = votes;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "MeetingAgendaDto{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", sessionStartedIn=" + sessionStartedIn +
                 ", sessionIntervalDuration=" + sessionIntervalDuration +

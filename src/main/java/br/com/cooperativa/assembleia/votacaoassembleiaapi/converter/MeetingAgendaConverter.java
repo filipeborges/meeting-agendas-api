@@ -1,6 +1,7 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.converter;
 
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaDto;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.MeetingAgenda;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class MeetingAgendaConverter {
     public MeetingAgendaDto dtoFromEntity(MeetingAgenda meetingAgenda) {
         if (meetingAgenda == null) return null;
         return new MeetingAgendaDto(
+                meetingAgenda.getId(),
                 meetingAgenda.getName(),
                 meetingAgenda.getDescription(),
                 meetingAgenda.getSessionStartedIn(),
@@ -35,5 +37,13 @@ public class MeetingAgendaConverter {
                 .stream()
                 .map(this::dtoFromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public MeetingAgenda entityFromForm(MeetingAgendaForm meetingAgendaForm) {
+        if (meetingAgendaForm == null) return null;
+        return new MeetingAgenda(
+                meetingAgendaForm.getName(),
+                meetingAgendaForm.getDescription()
+        );
     }
 }

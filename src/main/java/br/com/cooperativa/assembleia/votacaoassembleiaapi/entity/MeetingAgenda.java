@@ -1,5 +1,8 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.entity;
 
+import org.springframework.data.annotation.PersistenceConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeetingAgenda extends AbstractEntity {
@@ -10,8 +13,9 @@ public class MeetingAgenda extends AbstractEntity {
     private Long acceptedVotes;
     private Long rejectedVotes;
     private String result;
-    private final List<Vote> votes;
+    private List<Vote> votes;
 
+    @PersistenceConstructor
     public MeetingAgenda(String name, String description, Long sessionStartedIn, Long sessionIntervalDuration,
                          Long acceptedVotes, Long rejectedVotes, String result, List<Vote> votes,
                          String id, Long version) {
@@ -25,6 +29,12 @@ public class MeetingAgenda extends AbstractEntity {
         this.id = id;
         this.version = version;
         this.votes = votes;
+    }
+
+    public MeetingAgenda(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.votes = new ArrayList<>();
     }
 
     public String getName() {
