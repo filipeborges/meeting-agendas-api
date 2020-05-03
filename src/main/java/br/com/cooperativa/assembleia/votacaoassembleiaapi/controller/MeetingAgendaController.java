@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,13 @@ public class MeetingAgendaController extends AbstractController {
         return ResponseEntity
                 .created(buildNewResourceUri(meetingAgendaDto.getId()))
                 .body(meetingAgendaDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MeetingAgendaDto> oneMeetingAgenda(
+            @PathVariable @NotBlank String id
+    ) {
+        return ResponseEntity.ok(meetingAgendaService.findOne(id));
     }
 
     @Override
