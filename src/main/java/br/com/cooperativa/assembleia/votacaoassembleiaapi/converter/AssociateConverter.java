@@ -13,14 +13,12 @@ public class AssociateConverter {
 
     public Associate entityFromForm(AssociateForm associateForm) {
         if (associateForm == null) return null;
-        Associate associate = new Associate();
-        associate.setName(associateForm.getName());
-        return associate;
+        return new Associate(associateForm.getName(), associateForm.getCpf());
     }
 
     public AssociateDto dtoFromEntity(Associate associate) {
         if (associate == null) return null;
-        return new AssociateDto(associate.getId(), associate.getName());
+        return new AssociateDto(associate.getId(), associate.getName(), associate.getCpf());
     }
 
     public List<AssociateDto> listDtoFromListEntity(List<Associate> associates) {
@@ -28,7 +26,7 @@ public class AssociateConverter {
         return associates
                 .stream()
                 .map(
-                        associate -> new AssociateDto(associate.getId(), associate.getName())
+                        associate -> new AssociateDto(associate.getId(), associate.getName(), associate.getCpf())
                 )
                 .collect(Collectors.toList());
     }

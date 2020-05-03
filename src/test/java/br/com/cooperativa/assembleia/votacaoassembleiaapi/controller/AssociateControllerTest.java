@@ -36,13 +36,13 @@ public class AssociateControllerTest {
 
     @BeforeEach
     public void setup() {
-        associateForm = new AssociateForm("Associate Name");
-        associateDto = new AssociateDto("123456", associateForm.getName());
+        associateForm = new AssociateForm("Associate Name", "611.402.760-42");
+        associateDto = new AssociateDto("123456", associateForm.getName(), associateForm.getCpf());
     }
 
     @Test
     public void retrieveAll200() throws Exception {
-        List<AssociateDto> listResult = List.of(new AssociateDto("123456", "Associate Name"));
+        List<AssociateDto> listResult = List.of(associateDto);
         when(associateService.getAll()).thenReturn(listResult);
         mockMvc.perform(get("/associates"))
                 .andExpect(status().isOk())

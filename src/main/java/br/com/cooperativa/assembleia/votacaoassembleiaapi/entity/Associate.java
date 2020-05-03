@@ -7,14 +7,16 @@ public class Associate {
     @Id
     private String id;
     private String name;
+    private String cpf;
     @Version
     private Long version;
 
     public Associate() {
     }
 
-    public Associate(String name) {
+    public Associate(String name, String cpf) {
         this.name = name;
+        this.cpf = cpf;
     }
 
     public void setName(String name) {
@@ -29,13 +31,21 @@ public class Associate {
         return name;
     }
 
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     @Override
     public String toString() {
         return "Associate{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", cpf='" + cpf + '\'' +
                 ", version=" + version +
                 '}';
     }
-
 }

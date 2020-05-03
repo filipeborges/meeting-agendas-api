@@ -21,10 +21,11 @@ public class AssociateConverterTest {
 
     @Test
     public void entityFromFormSuccess() {
-        AssociateForm associateForm = new AssociateForm("Joao Carlos");
+        AssociateForm associateForm = new AssociateForm("Joao Carlos", "611.402.760-42");
         Associate associate = associateConverter.entityFromForm(associateForm);
         assertNotNull(associate, "Associate must be not null");
         assertEquals(associateForm.getName(), associate.getName(), "Associate names should be equal");
+        assertEquals(associateForm.getCpf(), associate.getCpf(), "CPF should be equal");
     }
 
     @Test
@@ -35,10 +36,11 @@ public class AssociateConverterTest {
 
     @Test
     public void dtoFromEntitySuccess() {
-        Associate associate = new Associate("Entity from DB");
+        Associate associate = new Associate("Entity from DB", "641.990.630-05");
         AssociateDto associateDto = associateConverter.dtoFromEntity(associate);
         assertNotNull(associateDto, "AssociateDto must be not null");
         assertEquals(associate.getName(), associateDto.getName(), "Associate names should be equal");
+        assertEquals(associate.getCpf(), associateDto.getCpf(), "CPF should be equal");
         assertNull(associateDto.getId(), "Associate ID should be null");
     }
 
@@ -50,15 +52,17 @@ public class AssociateConverterTest {
 
     @Test
     public void listDtoFromListEntitySuccess() {
-        Associate associate1 = new Associate("Associate 1");
-        Associate associate2 = new Associate("Associate 2");
+        Associate associate1 = new Associate("Associate 1", "641.990.630-05");
+        Associate associate2 = new Associate("Associate 2", "433.766.100-02");
         List<Associate> listEntity = List.of(associate1, associate2);
         List<AssociateDto> listDto = associateConverter.listDtoFromListEntity(listEntity);
 
         assertNotNull(listDto, "List Dto should be not null");
         assertEquals(2, listDto.size(), "List Dto size should be 2");
         assertEquals(associate1.getName(), listDto.get(0).getName(), "Associate names should be equal");
+        assertEquals(associate1.getCpf(), listDto.get(0).getCpf(), "CPF should be equal");
         assertEquals(associate2.getName(), listDto.get(1).getName(), "Associate names should be equal");
+        assertEquals(associate2.getCpf(), listDto.get(1).getCpf(), "CPF should be equal");
     }
 
     @Test
