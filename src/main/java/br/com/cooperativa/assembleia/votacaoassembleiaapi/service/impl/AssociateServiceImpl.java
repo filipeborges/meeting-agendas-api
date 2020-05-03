@@ -55,4 +55,10 @@ public class AssociateServiceImpl implements AssociateService {
         associate.setName(associateForm.getName());
         return associateConverter.dtoFromEntity(associateRepository.save(associate));
     }
+
+    @Override
+    public void verifyIfAssociateExists(@NotBlank String id) {
+        if (!associateRepository.existsById(id)) throw new ResourceNotFoundException(RESOURCE_NAME, id);
+    }
+
 }

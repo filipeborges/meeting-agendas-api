@@ -1,10 +1,6 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.controller;
 
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.associate.AssociateDto;
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaDto;
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaForm;
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaStartSessionForm;
-import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.VoteDto;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.*;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaService;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.VoteService;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -99,6 +96,16 @@ public class MeetingAgendaController extends AbstractController {
             @PathVariable("id") @NotBlank String meetingAgendaId
     ) {
         return ResponseEntity.ok(voteService.getAll(meetingAgendaId));
+    }
+
+    @PutMapping("/{id}/votes/{id-associate}")
+    public ResponseEntity<VoteDto> replaceVoteFromMeetingAgenda(
+            @RequestBody @NotNull @Valid VoteForm voteForm,
+            @PathVariable("id") @NotBlank String meetingAgendaId,
+            @PathVariable("id-associate") @NotBlank String associateId
+    ) {
+        // TODO: Integrar com o servico de CPF
+        return ResponseEntity.ok(voteService.update(voteForm, meetingAgendaId, associateId));
     }
 
     @Override

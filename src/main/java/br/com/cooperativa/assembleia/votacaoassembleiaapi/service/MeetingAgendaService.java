@@ -3,6 +3,7 @@ package br.com.cooperativa.assembleia.votacaoassembleiaapi.service;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaDto;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.MeetingAgendaStartSessionForm;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.MeetingAgenda;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -20,4 +21,8 @@ public interface MeetingAgendaService {
             @NotNull @Valid MeetingAgendaStartSessionForm meetingAgendaStartSessionForm,
             @NotBlank String id
     );
+
+    MeetingAgenda findOneEntity(@NotBlank String id);
+
+    MeetingAgenda saveEntity(@NotNull MeetingAgenda meetingAgenda);
 }

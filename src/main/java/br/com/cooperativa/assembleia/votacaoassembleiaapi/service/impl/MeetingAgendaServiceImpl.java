@@ -45,9 +45,7 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
 
     @Override
     public MeetingAgendaDto findOne(@NotBlank String id) {
-        MeetingAgenda meetingAgenda = meetingAgendaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, id));
-        return meetingAgendaConverter.dtoFromEntity(meetingAgenda);
+        return meetingAgendaConverter.dtoFromEntity(findOneEntity(id));
     }
 
     @Override
@@ -63,6 +61,17 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
         ); // TODO: Improve
 
         return meetingAgendaConverter.dtoFromEntity(meetingAgendaRepository.save(meetingAgenda));
+    }
+
+    @Override
+    public MeetingAgenda findOneEntity(@NotBlank String id) {
+        return meetingAgendaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, id));
+    }
+
+    @Override
+    public MeetingAgenda saveEntity(@NotNull MeetingAgenda meetingAgenda) {
+        return meetingAgendaRepository.save(meetingAgenda);
     }
 
     private Long calculateSessionIntervalDuration(@NotNull Long sessionDurationMin) {

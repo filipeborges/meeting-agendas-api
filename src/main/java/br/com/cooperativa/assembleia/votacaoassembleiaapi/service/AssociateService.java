@@ -18,4 +18,5 @@ public interface AssociateService {
 
     AssociateDto update(@NotNull @Valid AssociateForm associateForm, @NotBlank String id);
 
+    void verifyIfAssociateExists(@NotBlank String id);
 }
