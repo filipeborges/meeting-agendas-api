@@ -1,5 +1,7 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.entity;
 
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.enums.MeetingAgendaVotingResultEnum;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.enums.VoteResultEnum;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
 
@@ -84,6 +86,35 @@ public class MeetingAgenda extends AbstractEntity {
 
     public List<Vote> getVotes() {
         return votes;
+    }
+
+    @Transient
+    public void updateNumberOfVotes() {
+        acceptedVotes = 0L;
+        rejectedVotes = 0L;
+        if (votes != null) {
+            votes.forEach(vote -> {
+                if (VoteResultEnum.accept.name().equals(vote.getValue())) {
+                    ++acceptedVotes;
+                } else {
+                    ++rejectedVotes;
+                }
+            });
+        }
+    }
+
+    @Transient
+    public void updateFinalResult() {
+        if (acceptedVotes == null || rejectedVotes == null) return;
+
+        if (acceptedVotes > rejectedVotes) {
+            result = MeetingAgendaVotingResultEnum.accepted.name();
+        }
+        else if (acceptedVotes < rejectedVotes) {
+            result = MeetingAgendaVotingResultEnum.rejected.name();
+        } else {
+            result = MeetingAgendaVotingResultEnum.tied.name();
+        }
     }
 
     @Transient

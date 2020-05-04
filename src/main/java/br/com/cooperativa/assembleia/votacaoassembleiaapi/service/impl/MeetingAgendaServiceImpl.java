@@ -9,6 +9,7 @@ import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.ResourceNotF
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.repository.MeetingAgendaRepository;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -26,7 +27,8 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
     private final MeetingAgendaRepository meetingAgendaRepository;
     private final MeetingAgendaConverter meetingAgendaConverter;
 
-    public MeetingAgendaServiceImpl(MeetingAgendaRepository meetingAgendaRepository, MeetingAgendaConverter meetingAgendaConverter) {
+    public MeetingAgendaServiceImpl(MeetingAgendaRepository meetingAgendaRepository,
+                                    MeetingAgendaConverter meetingAgendaConverter) {
         this.meetingAgendaRepository = meetingAgendaRepository;
         this.meetingAgendaConverter = meetingAgendaConverter;
     }
@@ -70,6 +72,25 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
     @Override
     public MeetingAgenda saveEntity(@NotNull MeetingAgenda meetingAgenda) {
         return meetingAgendaRepository.save(meetingAgenda);
+    }
+
+    @Override
+    public List<MeetingAgenda> closePendingVotingSession() {
+        List<MeetingAgenda> pendingMeetingAgendas = meetingAgendaRepository.findAllVotingSessionThatNeedClose(
+                new Date().getTime()
+        );
+        updateMeetingAgendaVotingResult(pendingMeetingAgendas);
+        return meetingAgendaRepository.saveAll(pendingMeetingAgendas);
+    }
+
+    private void updateMeetingAgendaVotingResult(@NotNull List<MeetingAgenda> pendingMeetingAgendas) {
+        pendingMeetingAgendas
+                .stream()
+                .filter(meetAgenda -> StringUtils.isEmpty(meetAgenda.getResult()))
+                .forEach(meetAgenda -> {
+                    meetAgenda.updateNumberOfVotes();
+                    meetAgenda.updateFinalResult();
+                });
     }
 
     private Long calculateSessionIntervalDuration(@NotNull Long sessionDurationMin) {

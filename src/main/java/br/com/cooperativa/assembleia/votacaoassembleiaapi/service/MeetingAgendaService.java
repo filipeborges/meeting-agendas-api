@@ -25,4 +25,7 @@ public interface MeetingAgendaService {
     MeetingAgenda findOneEntity(@NotBlank String id);
 
     MeetingAgenda saveEntity(@NotNull MeetingAgenda meetingAgenda);
+
+    List<MeetingAgenda> closePendingVotingSession();
+
 }

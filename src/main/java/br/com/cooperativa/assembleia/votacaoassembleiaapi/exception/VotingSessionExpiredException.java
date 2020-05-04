@@ -10,4 +10,8 @@ public class VotingSessionExpiredException extends RuntimeException {
                 )
         );
     }
+
+    public VotingSessionExpiredException(String message) {
+        super(message);
+    }
 }

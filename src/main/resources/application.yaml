@@ -5,6 +5,9 @@ spring:
       host: localhost:27017
 
 app:
+  scheduler:
+    close-voting-session:
+      execution-interval-ms: 30000 # Every 30s
   rest-client:
     user-info:
       host: https://user-info.herokuapp.com
