@@ -92,24 +92,47 @@ public class MeetingAgendaController extends AbstractController {
     // ============================= VOTES SUB RESOURCE =========================================== //
 
     @GetMapping("/{id}/votes/")
+    @ApiOperation(value = "Retrieve all votes in a specific meeting agenda", response = MeetingAgendaDto.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<List<VoteDto>> retrieveAllVotesFromMeetingAgenda(
+            @ApiParam(value = "Meeting agenda id", required = true)
             @PathVariable("id") @NotBlank String meetingAgendaId
     ) {
         return ResponseEntity.ok(voteService.getAll(meetingAgendaId));
     }
 
     @PutMapping("/{id}/votes/{id-associate}")
+    @ApiOperation(value = "Vote in a specific meeting agenda", response = VoteDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully updated"),
+            @ApiResponse(code = 400, message = "Wrong payload data"),
+            @ApiResponse(code = 404, message = "Not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<VoteDto> replaceVoteFromMeetingAgenda(
+            @ApiParam(value = "Vote data", required = true)
             @RequestBody @NotNull @Valid VoteForm voteForm,
+            @ApiParam(value = "Meeting agenda Id", required = true)
             @PathVariable("id") @NotBlank String meetingAgendaId,
+            @ApiParam(value = "Associate Id", required = true)
             @PathVariable("id-associate") @NotBlank String associateId
     ) {
         return ResponseEntity.ok(voteService.update(voteForm, meetingAgendaId, associateId));
     }
 
     @GetMapping("/{id}/votes/{id-associate}")
+    @ApiOperation(value = "Retrieve associate vote in a specific meeting agenda", response = VoteDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     public ResponseEntity<VoteDto> retrieveVoteFromMeetingAgendaAndAssociate(
+            @ApiParam(value = "Meeting agenda Id", required = true)
             @PathVariable("id") @NotBlank String meetingAgendaId,
+            @ApiParam(value = "Associate Id", required = true)
             @PathVariable("id-associate") @NotBlank String associateId
     ) {
         return ResponseEntity.ok(voteService.getVoteFromAssociate(meetingAgendaId, associateId));

@@ -12,5 +12,5 @@ public interface MeetingAgendaRepository extends MongoRepository<MeetingAgenda, 
     Optional<MeetingAgenda> findVoteByMeetingAgendaIdAndAssociateId(String id, String associateId);
 
     @Query("{ $and: [ { sessionExpireIn: { $lt: ?0 } }, { result: null } ] }")
-    List<MeetingAgenda> findAllVotingSessionThatNeedClose(Long currentTimeMs);
+    List<MeetingAgenda> findAllVotingSessionExpired(Long currentTimeMs);
 }

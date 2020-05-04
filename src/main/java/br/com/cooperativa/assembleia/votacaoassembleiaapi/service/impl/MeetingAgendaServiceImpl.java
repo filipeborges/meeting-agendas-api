@@ -76,7 +76,7 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
 
     @Override
     public List<MeetingAgenda> closePendingVotingSession() {
-        List<MeetingAgenda> pendingMeetingAgendas = meetingAgendaRepository.findAllVotingSessionThatNeedClose(
+        List<MeetingAgenda> pendingMeetingAgendas = meetingAgendaRepository.findAllVotingSessionExpired(
                 new Date().getTime()
         );
         updateMeetingAgendaVotingResult(pendingMeetingAgendas);

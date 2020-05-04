@@ -29,8 +29,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiEndpointInfo() {
         return new ApiInfoBuilder()
-                .title("Votacao Assembléia API")
-                .description("API REST de votacao de pautas de uma assembléia")
+                .title("Meeting Agenda API")
+                .description("REST API of meeting agenda votes")
                 .version("1.0.0")
                 .build();
     }
