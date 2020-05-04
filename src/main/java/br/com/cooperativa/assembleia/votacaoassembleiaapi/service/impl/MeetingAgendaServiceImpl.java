@@ -23,8 +23,8 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
 
     private static final String RESOURCE_NAME = "meeting-agenda";
 
-    private MeetingAgendaRepository meetingAgendaRepository;
-    private MeetingAgendaConverter meetingAgendaConverter;
+    private final MeetingAgendaRepository meetingAgendaRepository;
+    private final MeetingAgendaConverter meetingAgendaConverter;
 
     public MeetingAgendaServiceImpl(MeetingAgendaRepository meetingAgendaRepository, MeetingAgendaConverter meetingAgendaConverter) {
         this.meetingAgendaRepository = meetingAgendaRepository;
@@ -55,11 +55,9 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
     ) {
         MeetingAgenda meetingAgenda = meetingAgendaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NAME, id));
-        meetingAgenda.setSessionStartedIn(new Date().getTime());
-        meetingAgenda.setSessionIntervalDuration(
-                calculateSessionIntervalDuration(meetingAgendaStartSessionForm.getSessionDurationMin())
+        meetingAgenda.setSessionExpireIn(
+                new Date().getTime() + calculateSessionIntervalDuration(meetingAgendaStartSessionForm.getSessionDurationMin())
         );
-
         return meetingAgendaConverter.dtoFromEntity(meetingAgendaRepository.save(meetingAgenda));
     }
 

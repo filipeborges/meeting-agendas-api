@@ -3,10 +3,10 @@ package br.com.cooperativa.assembleia.votacaoassembleiaapi.exception;
 import java.util.Date;
 
 public class VotingSessionExpiredException extends RuntimeException {
-    public VotingSessionExpiredException(Long sessionStartedIn, Long sessionIntervalDuration) {
+    public VotingSessionExpiredException(Long sessionExpiredIn) {
         super(
                 String.format(
-                        "Voting session expired in - %s", new Date(sessionStartedIn + sessionIntervalDuration)
+                        "Voting session expired in - %s", new Date(sessionExpiredIn)
                 )
         );
     }

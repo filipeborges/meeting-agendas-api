@@ -10,26 +10,21 @@ import java.util.List;
 public class MeetingAgenda extends AbstractEntity {
     private String name;
     private String description;
-    private Long sessionStartedIn;
-    private Long sessionIntervalDuration;
+    private Long sessionExpireIn;
     private Long acceptedVotes;
     private Long rejectedVotes;
     private String result;
     private List<Vote> votes;
 
     @PersistenceConstructor
-    public MeetingAgenda(String name, String description, Long sessionStartedIn, Long sessionIntervalDuration,
-                         Long acceptedVotes, Long rejectedVotes, String result, List<Vote> votes,
-                         String id, Long version) {
+    public MeetingAgenda(String name, String description, Long sessionExpireIn, Long acceptedVotes,
+                         Long rejectedVotes, String result, List<Vote> votes) {
         this.name = name;
         this.description = description;
-        this.sessionStartedIn = sessionStartedIn;
-        this.sessionIntervalDuration = sessionIntervalDuration;
+        this.sessionExpireIn = sessionExpireIn;
         this.acceptedVotes = acceptedVotes;
         this.rejectedVotes = rejectedVotes;
         this.result = result;
-        this.id = id;
-        this.version = version;
         this.votes = votes;
     }
 
@@ -55,20 +50,12 @@ public class MeetingAgenda extends AbstractEntity {
         this.description = description;
     }
 
-    public Long getSessionStartedIn() {
-        return sessionStartedIn;
+    public Long getSessionExpireIn() {
+        return sessionExpireIn;
     }
 
-    public void setSessionStartedIn(Long sessionStartedIn) {
-        this.sessionStartedIn = sessionStartedIn;
-    }
-
-    public Long getSessionIntervalDuration() {
-        return sessionIntervalDuration;
-    }
-
-    public void setSessionIntervalDuration(Long sessionIntervalDuration) {
-        this.sessionIntervalDuration = sessionIntervalDuration;
+    public void setSessionExpireIn(Long sessionExpireIn) {
+        this.sessionExpireIn = sessionExpireIn;
     }
 
     public Long getAcceptedVotes() {
@@ -102,9 +89,8 @@ public class MeetingAgenda extends AbstractEntity {
     @Transient
     public boolean isSessionOpen() {
         long currentTime = new Date().getTime();
-        return sessionStartedIn != null
-                && sessionIntervalDuration != null
-                && ( currentTime <= sessionStartedIn + sessionIntervalDuration );
+        return sessionExpireIn != null
+                && ( currentTime <= sessionExpireIn );
     }
 
     @Override
@@ -112,14 +98,11 @@ public class MeetingAgenda extends AbstractEntity {
         return "MeetingAgenda{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", sessionStartedIn=" + sessionStartedIn +
-                ", sessionIntervalDuration=" + sessionIntervalDuration +
+                ", sessionExpireIn=" + sessionExpireIn +
                 ", acceptedVotes=" + acceptedVotes +
                 ", rejectedVotes=" + rejectedVotes +
                 ", result='" + result + '\'' +
                 ", votes=" + votes +
-                ", id='" + id + '\'' +
-                ", version=" + version +
                 '}';
     }
 }

@@ -71,9 +71,7 @@ public class VoteServiceImpl implements VoteService {
 
     private void verifyIfVotingSessionIsOpen(MeetingAgenda meetingAgenda) {
         if (!meetingAgenda.isSessionOpen())
-            throw new VotingSessionExpiredException(
-                    meetingAgenda.getSessionStartedIn(), meetingAgenda.getSessionIntervalDuration()
-            );
+            throw new VotingSessionExpiredException(meetingAgenda.getSessionExpireIn());
     }
 
     private void verifyIfAssociateIsAllowedToVote(String associateId) {

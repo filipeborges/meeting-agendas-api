@@ -6,21 +6,18 @@ public class MeetingAgendaDto {
     private String id;
     private String name;
     private String description;
-    private Long sessionStartedInMs;
-    private Long sessionIntervalDurationMs;
+    private Long sessionExpireIn;
     private Long acceptedVotes;
     private Long rejectedVotes;
     private String result;
     private List<VoteDto> votes;
 
-    public MeetingAgendaDto(String id, String name, String description, Long sessionStartedInMs,
-                            Long sessionIntervalDurationMs, Long acceptedVotes, Long rejectedVotes,
-                            String result, List<VoteDto> votes) {
+    public MeetingAgendaDto(String id, String name, String description, Long sessionExpireIn,
+                            Long acceptedVotes, Long rejectedVotes, String result, List<VoteDto> votes) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.sessionStartedInMs = sessionStartedInMs;
-        this.sessionIntervalDurationMs = sessionIntervalDurationMs;
+        this.sessionExpireIn = sessionExpireIn;
         this.acceptedVotes = acceptedVotes;
         this.rejectedVotes = rejectedVotes;
         this.result = result;
@@ -43,20 +40,12 @@ public class MeetingAgendaDto {
         this.description = description;
     }
 
-    public Long getSessionStartedInMs() {
-        return sessionStartedInMs;
+    public Long getSessionExpireIn() {
+        return sessionExpireIn;
     }
 
-    public void setSessionStartedInMs(Long sessionStartedInMs) {
-        this.sessionStartedInMs = sessionStartedInMs;
-    }
-
-    public Long getSessionIntervalDurationMs() {
-        return sessionIntervalDurationMs;
-    }
-
-    public void setSessionIntervalDurationMs(Long sessionIntervalDurationMs) {
-        this.sessionIntervalDurationMs = sessionIntervalDurationMs;
+    public void setSessionExpireIn(Long sessionExpireIn) {
+        this.sessionExpireIn = sessionExpireIn;
     }
 
     public Long getAcceptedVotes() {
@@ -105,8 +94,7 @@ public class MeetingAgendaDto {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", sessionStartedIn=" + sessionStartedInMs +
-                ", sessionIntervalDuration=" + sessionIntervalDurationMs +
+                ", sessionExpireIn=" + sessionExpireIn +
                 ", acceptedVotes=" + acceptedVotes +
                 ", rejectedVotes=" + rejectedVotes +
                 ", result='" + result + '\'' +
