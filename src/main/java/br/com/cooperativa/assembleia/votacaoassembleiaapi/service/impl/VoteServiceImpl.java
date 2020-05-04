@@ -10,7 +10,6 @@ import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaS
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.VoteService;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -43,12 +42,17 @@ public class VoteServiceImpl implements VoteService {
             @NotBlank String meetingAgendaId,
             @NotBlank String associateId
     ) {
-        associateService.verifyIfAssociateExists(associateId);
+        verifyIfAssociateIsAllowedToVote(associateId);
         MeetingAgenda meetingAgenda = meetingAgendaService.findOneEntity(meetingAgendaId);
-        Vote voteToAdd = voteConverter.entityFromFormAndAssociateId(voteForm, associateId);
-        updateVote(meetingAgenda.getVotes(), voteToAdd);
+        Vote newVote = voteConverter.entityFromFormAndAssociateId(voteForm, associateId);
+        updateVote(meetingAgenda.getVotes(), newVote);
         meetingAgendaService.saveEntity(meetingAgenda);
-        return voteConverter.dtoFromEntity(voteToAdd);
+        return voteConverter.dtoFromEntity(newVote);
+    }
+
+    private void verifyIfAssociateIsAllowedToVote(String associateId) {
+        associateService.verifyIfAssociateExists(associateId);
+        associateService.verifyIfAssociateIsAbleToVote(associateId);
     }
 
     private void updateVote(List<Vote> existingVotes, Vote vote) {

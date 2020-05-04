@@ -1,13 +1,14 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.controller;
 
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.AssociateUnableToVoteException;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.ResourceNotFoundException;
+import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,6 +30,20 @@ public class ControllerExceptionAdvice {
     String invalidParamHandler(Exception ex) {
         logger.info("Invalid Param On Endpoint Calls", ex);
         return ex.getMessage();
+    }
+
+    @ExceptionHandler(FeignException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    String internalServerError(FeignException ex) {
+        logger.error("Error on user-info service", ex);
+        return String.format("Failed to communicate with cpf service validation - %s", ex.getMessage());
+    }
+
+    @ExceptionHandler(AssociateUnableToVoteException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    String internalServerError(AssociateUnableToVoteException ex) {
+        logger.error("Associate unable to vote", ex);
+        return String.format("Cpf invalid to vote - %s", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

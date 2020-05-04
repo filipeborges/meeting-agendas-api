@@ -104,7 +104,6 @@ public class MeetingAgendaController extends AbstractController {
             @PathVariable("id") @NotBlank String meetingAgendaId,
             @PathVariable("id-associate") @NotBlank String associateId
     ) {
-        // TODO: Integrar com o servico de CPF
         return ResponseEntity.ok(voteService.update(voteForm, meetingAgendaId, associateId));
     }
 

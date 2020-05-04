@@ -3,3 +3,8 @@ spring:
     mongodb:
       database: votacao-pauta
       host: localhost:27017
+
+app:
+  rest-client:
+    user-info:
+      host: https://user-info.herokuapp.com
