@@ -1,8 +1,8 @@
 spring:
   data:
     mongodb:
-      database: votacao-pauta
-      host: localhost:27017
+      database: meeting-agendas
+      host: mongo-host:27017
 
 app:
   scheduler:

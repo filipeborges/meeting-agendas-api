@@ -1,14 +1,16 @@
 version: '3'
 services:
-  api:
-    build: .
-    ports:
-      - "8080:8080"
   mongo:
     image: "mongo:4.0.18-xenial"
+    container_name: mongo-container
+    networks:
+      default:
+        aliases:
+          - mongo-host
     ports:
       - "27017:27017"
-  rabbitmq:
-    image: "rabbitmq:3.8.3-alpine"
+  api:
+    build: .
+    container_name: meeting-agendas-api
     ports:
-      - "5672:5672"
+      - "8080:8080"
