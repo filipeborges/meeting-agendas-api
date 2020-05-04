@@ -107,6 +107,7 @@ public class MeetingAgenda extends AbstractEntity {
                 ", acceptedVotes=" + acceptedVotes +
                 ", rejectedVotes=" + rejectedVotes +
                 ", result='" + result + '\'' +
+                ", votes=" + votes +
                 ", id='" + id + '\'' +
                 ", version=" + version +
                 '}';

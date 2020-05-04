@@ -5,6 +5,8 @@ import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.Vote
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.VoteForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.MeetingAgenda;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.Vote;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.ResourceNotFoundException;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.repository.MeetingAgendaRepository;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.AssociateService;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaService;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.VoteService;
@@ -20,15 +22,18 @@ public class VoteServiceImpl implements VoteService {
     private final MeetingAgendaService meetingAgendaService;
     private final VoteConverter voteConverter;
     private final AssociateService associateService;
+    private final MeetingAgendaRepository meetingAgendaRepository;
 
     public VoteServiceImpl(
             MeetingAgendaService meetingAgendaService,
             VoteConverter voteConverter,
-            AssociateService associateService
+            AssociateService associateService,
+            MeetingAgendaRepository meetingAgendaRepository
     ) {
         this.meetingAgendaService = meetingAgendaService;
         this.voteConverter = voteConverter;
-        this.associateService = associateService;
+        this.associateService = associateService; // TODO: Change for direct access to repository
+        this.meetingAgendaRepository = meetingAgendaRepository;
     }
 
     @Override
@@ -48,6 +53,18 @@ public class VoteServiceImpl implements VoteService {
         updateVote(meetingAgenda.getVotes(), newVote);
         meetingAgendaService.saveEntity(meetingAgenda);
         return voteConverter.dtoFromEntity(newVote);
+    }
+
+    @Override
+    public VoteDto getVoteFromAssociate(@NotBlank String meetingAgendaId, @NotBlank String associateId) {
+        MeetingAgenda meetingAgenda = meetingAgendaRepository.findVoteByMeetingAgendaIdAndAssociateId(
+                meetingAgendaId, associateId
+        ).orElseThrow(() -> new ResourceNotFoundException("meeting-agenda", meetingAgendaId));
+
+        final boolean emptyVotes = meetingAgenda.getVotes() == null || meetingAgenda.getVotes().isEmpty();
+        if (emptyVotes) throw new ResourceNotFoundException("Associate vote not found");
+
+        return voteConverter.dtoFromEntity(meetingAgenda.getVotes().get(0));
     }
 
     private void verifyIfAssociateIsAllowedToVote(String associateId) {

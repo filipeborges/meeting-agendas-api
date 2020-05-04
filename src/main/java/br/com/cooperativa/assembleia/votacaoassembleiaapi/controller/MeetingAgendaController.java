@@ -107,6 +107,14 @@ public class MeetingAgendaController extends AbstractController {
         return ResponseEntity.ok(voteService.update(voteForm, meetingAgendaId, associateId));
     }
 
+    @GetMapping("/{id}/votes/{id-associate}")
+    public ResponseEntity<VoteDto> retrieveVoteFromMeetingAgendaAndAssociate(
+            @PathVariable("id") @NotBlank String meetingAgendaId,
+            @PathVariable("id-associate") @NotBlank String associateId
+    ) {
+        return ResponseEntity.ok(voteService.getVoteFromAssociate(meetingAgendaId, associateId));
+    }
+
     @Override
     public String getResourceBaseUri() {
         return "/meeting-agendas";

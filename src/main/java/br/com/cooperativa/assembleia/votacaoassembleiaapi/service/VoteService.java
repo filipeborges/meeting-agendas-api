@@ -12,4 +12,6 @@ public interface VoteService {
     List<VoteDto> getAll(@NotBlank String meetingAgendaId);
 
     VoteDto update(@NotNull @Valid VoteForm voteForm, @NotBlank String meetingAgendaId, @NotBlank String associateId);
+
+    VoteDto getVoteFromAssociate(@NotBlank String meetingAgendaId, @NotBlank String associateId);
 }
