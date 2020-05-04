@@ -5,7 +5,9 @@ import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.Vote
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.meetingagenda.VoteForm;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.MeetingAgenda;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.entity.Vote;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.AssociateUnableToVoteException;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.ResourceNotFoundException;
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.VotingSessionExpiredException;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.repository.MeetingAgendaRepository;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.AssociateService;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.service.MeetingAgendaService;
@@ -47,8 +49,9 @@ public class VoteServiceImpl implements VoteService {
             @NotBlank String meetingAgendaId,
             @NotBlank String associateId
     ) {
-        verifyIfAssociateIsAllowedToVote(associateId);
         MeetingAgenda meetingAgenda = meetingAgendaService.findOneEntity(meetingAgendaId);
+        verifyIfVotingSessionIsOpen(meetingAgenda);
+        verifyIfAssociateIsAllowedToVote(associateId);
         Vote newVote = voteConverter.entityFromFormAndAssociateId(voteForm, associateId);
         updateVote(meetingAgenda.getVotes(), newVote);
         meetingAgendaService.saveEntity(meetingAgenda);
@@ -65,6 +68,13 @@ public class VoteServiceImpl implements VoteService {
         if (emptyVotes) throw new ResourceNotFoundException("Associate vote not found");
 
         return voteConverter.dtoFromEntity(meetingAgenda.getVotes().get(0));
+    }
+
+    private void verifyIfVotingSessionIsOpen(MeetingAgenda meetingAgenda) {
+        if (!meetingAgenda.isSessionOpen())
+            throw new VotingSessionExpiredException(
+                    meetingAgenda.getSessionStartedIn(), meetingAgenda.getSessionIntervalDuration()
+            );
     }
 
     private void verifyIfAssociateIsAllowedToVote(String associateId) {

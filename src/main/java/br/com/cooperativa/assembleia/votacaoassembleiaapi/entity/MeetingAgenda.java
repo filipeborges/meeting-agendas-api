@@ -1,8 +1,10 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.entity;
 
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MeetingAgenda extends AbstractEntity {
@@ -95,6 +97,14 @@ public class MeetingAgenda extends AbstractEntity {
 
     public List<Vote> getVotes() {
         return votes;
+    }
+
+    @Transient
+    public boolean isSessionOpen() {
+        long currentTime = new Date().getTime();
+        return sessionStartedIn != null
+                && sessionIntervalDuration != null
+                && ( currentTime <= sessionStartedIn + sessionIntervalDuration );
     }
 
     @Override
