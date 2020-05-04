@@ -1,5 +1,6 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.controller;
 
+import br.com.cooperativa.assembleia.votacaoassembleiaapi.dto.ControllerExceptionAdviceDto;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.AssociateUnableToVoteException;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.ResourceNotFoundException;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.exception.VotingSessionExpiredException;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-// TODO: Return JSON object
+import java.util.Date;
+
 @RestControllerAdvice
 public class ControllerExceptionAdvice {
 
@@ -21,37 +23,45 @@ public class ControllerExceptionAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String resourceNotFoundHandler(ResourceNotFoundException ex) {
+    ControllerExceptionAdviceDto resourceNotFoundHandler(ResourceNotFoundException ex) {
         logger.info("Resource Not Found", ex);
-        return ex.getMessage();
+        return buildReturnDto(ex.getMessage());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String invalidParamHandler(Exception ex) {
+    ControllerExceptionAdviceDto invalidParamHandler(Exception ex) {
         logger.info("Invalid Param On Endpoint Calls", ex);
-        return ex.getMessage();
+        return buildReturnDto(ex.getMessage());
     }
 
     @ExceptionHandler(FeignException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    String feignErrorHandler(FeignException ex) {
+    ControllerExceptionAdviceDto feignErrorHandler(FeignException ex) {
         logger.error("Error on user-info service", ex);
-        return String.format("Failed to communicate with cpf service validation - %s", ex.getMessage());
+        return buildReturnDto(
+                String.format("Failed to communicate with cpf service validation - %s", ex.getMessage())
+        );
     }
 
     @ExceptionHandler({AssociateUnableToVoteException.class, VotingSessionExpiredException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    String unableToVoteHandler(Exception ex) {
+    ControllerExceptionAdviceDto unableToVoteHandler(Exception ex) {
         logger.error("Associate unable to vote", ex);
-        return ex.getMessage();
+        return buildReturnDto(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    String internalServerErrorHandler(Exception ex) {
+    ControllerExceptionAdviceDto internalServerErrorHandler(Exception ex) {
         logger.error("Exception thrown", ex);
-        return String.format("Internal Server Error - %s", ex.getMessage());
+        return buildReturnDto(
+                String.format("Internal Server Error - %s", ex.getMessage())
+        );
+    }
+
+    private ControllerExceptionAdviceDto buildReturnDto(String message) {
+        return new ControllerExceptionAdviceDto(new Date(), message);
     }
 
 }

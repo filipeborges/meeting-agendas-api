@@ -58,7 +58,7 @@ public class MeetingAgendaServiceImpl implements MeetingAgendaService {
         meetingAgenda.setSessionStartedIn(new Date().getTime());
         meetingAgenda.setSessionIntervalDuration(
                 calculateSessionIntervalDuration(meetingAgendaStartSessionForm.getSessionDurationMin())
-        ); // TODO: Improve
+        );
 
         return meetingAgendaConverter.dtoFromEntity(meetingAgendaRepository.save(meetingAgenda));
     }
