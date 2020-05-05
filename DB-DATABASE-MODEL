@@ -1,19 +1,19 @@
 Associate {
     _Id: <ObjectId>,
-    name: <string>
+    name: <string>,
+    cpf: <string>
 }
 
-Pauta {
+MeetingAgenda {
     _Id: <ObjectId>,
     name: <string>,
     description: <string>,
-    session_started_in: <long>,
-    session_duration: <long>,
-    num_accepted: <number>,
-    num_rejected: <number>,
+    sessionExpireIn: <number>,
+    acceptedVotes: <number>,
+    rejectedVotes: <number>,
     result: <string>,
     votes: [{
-        associate_id: <ObjectId>,
-        value: <'S' | 'N'>
+        associateId: <string>,
+        value: <'accept' | 'reject'>
     }]
 }
