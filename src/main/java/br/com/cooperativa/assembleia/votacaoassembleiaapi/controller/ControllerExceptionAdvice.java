@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RestControllerAdvice
@@ -23,45 +24,45 @@ public class ControllerExceptionAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    ControllerExceptionAdviceDto resourceNotFoundHandler(ResourceNotFoundException ex) {
+    ControllerExceptionAdviceDto resourceNotFoundHandler(HttpServletRequest req, ResourceNotFoundException ex) {
         logger.info("Resource Not Found", ex);
-        return buildReturnDto(ex.getMessage());
+        return buildReturnDto("Resource Not Found", ex.getMessage(), req);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    ControllerExceptionAdviceDto invalidParamHandler(Exception ex) {
+    ControllerExceptionAdviceDto invalidParamHandler(HttpServletRequest req, Exception ex) {
         logger.info("Invalid Param On Endpoint Calls", ex);
-        return buildReturnDto(ex.getMessage());
+        return buildReturnDto("Invalid Param On Endpoint Calls", ex.getMessage(), req);
     }
 
     @ExceptionHandler(FeignException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ControllerExceptionAdviceDto feignErrorHandler(FeignException ex) {
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    ControllerExceptionAdviceDto feignErrorHandler(HttpServletRequest req, FeignException ex) {
         logger.error("Error on user-info service", ex);
-        return buildReturnDto(
-                String.format("Failed to communicate with cpf service validation - %s", ex.getMessage())
-        );
+        return buildReturnDto("Failed to communicate with cpf service validation", ex.getMessage(), req);
     }
 
     @ExceptionHandler({AssociateUnableToVoteException.class, VotingSessionExpiredException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    ControllerExceptionAdviceDto unableToVoteHandler(Exception ex) {
+    ControllerExceptionAdviceDto unableToVoteHandler(HttpServletRequest req, Exception ex) {
         logger.error("Associate unable to vote", ex);
-        return buildReturnDto(ex.getMessage());
+        return buildReturnDto("Associate unable to vote", ex.getMessage(), req);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ControllerExceptionAdviceDto internalServerErrorHandler(Exception ex) {
+    ControllerExceptionAdviceDto internalServerErrorHandler(HttpServletRequest req, RuntimeException ex) {
         logger.error("Exception thrown", ex);
-        return buildReturnDto(
-                String.format("Internal Server Error - %s", ex.getMessage())
-        );
+        return buildReturnDto("Unexpected error encountered", ex.getMessage(), req);
     }
 
-    private ControllerExceptionAdviceDto buildReturnDto(String message) {
-        return new ControllerExceptionAdviceDto(new Date(), message);
+    private ControllerExceptionAdviceDto buildReturnDto(
+            String message,
+            String detail,
+            HttpServletRequest req
+    ) {
+        return new ControllerExceptionAdviceDto(new Date(), message, detail, req.getServletPath());
     }
 
 }

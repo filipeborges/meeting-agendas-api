@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/meeting-agendas")
 @Validated
-public class MeetingAgendaController extends AbstractController {
+public class MeetingAgendaController {
 
     @Autowired
     private MeetingAgendaService meetingAgendaService;
@@ -55,7 +56,9 @@ public class MeetingAgendaController extends AbstractController {
     ) {
         MeetingAgendaDto meetingAgendaDto = meetingAgendaService.create(meetingAgendaForm);
         return ResponseEntity
-                .created(buildNewResourceUri(meetingAgendaDto.getId()))
+                .created(
+                        URI.create(String.format("/meeting-agendas/%s", meetingAgendaDto.getId()))
+                )
                 .body(meetingAgendaDto);
     }
 
@@ -110,7 +113,8 @@ public class MeetingAgendaController extends AbstractController {
             @ApiResponse(code = 200, message = "Successfully updated"),
             @ApiResponse(code = 400, message = "Wrong payload data"),
             @ApiResponse(code = 404, message = "Not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error")
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+            @ApiResponse(code = 503, message = "Service Unavailable")
     })
     public ResponseEntity<VoteDto> replaceVoteFromMeetingAgenda(
             @ApiParam(value = "Vote data", required = true)
@@ -138,8 +142,4 @@ public class MeetingAgendaController extends AbstractController {
         return ResponseEntity.ok(voteService.getVoteFromAssociate(meetingAgendaId, associateId));
     }
 
-    @Override
-    public String getResourceBaseUri() {
-        return "/meeting-agendas";
-    }
 }

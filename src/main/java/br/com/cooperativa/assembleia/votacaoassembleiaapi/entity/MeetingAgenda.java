@@ -2,14 +2,20 @@ package br.com.cooperativa.assembleia.votacaoassembleiaapi.entity;
 
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.enums.MeetingAgendaVotingResultEnum;
 import br.com.cooperativa.assembleia.votacaoassembleiaapi.enums.VoteResultEnum;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.annotation.Version;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MeetingAgenda extends AbstractEntity {
+public class MeetingAgenda {
+    @Id
+    protected String id;
+    @Version
+    protected Long version;
     private String name;
     private String description;
     private Long sessionExpireIn;
@@ -88,6 +94,10 @@ public class MeetingAgenda extends AbstractEntity {
         return votes;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Transient
     public void updateNumberOfVotes() {
         acceptedVotes = 0L;
@@ -127,7 +137,9 @@ public class MeetingAgenda extends AbstractEntity {
     @Override
     public String toString() {
         return "MeetingAgenda{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", version=" + version +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", sessionExpireIn=" + sessionExpireIn +
                 ", acceptedVotes=" + acceptedVotes +

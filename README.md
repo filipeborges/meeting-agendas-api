@@ -14,6 +14,8 @@ Uma api simples para gerenciar sessões de votação de uma assembléia.
 
 - Docker: Foi utilizado também o docker junto com o docker-compose, para automatizar o processo de instalação/execução da aplicação, bem como do banco Mongo.
 
+- RabbitMQ: Mensageria usada na notificação do resultado.
+
 ### Como executar a aplicação
 
 **Requisitos:**
@@ -68,3 +70,5 @@ O formato das entidades está descrito no arquivo **DB-DATABASE-MODEL**. Como n�
 - **Fechamento de sessão e cálculo de resultado** - Considerando a utilização do Spring MVC, a melhor solução encontrada para encerrar a votação e cálcular o resultado, após um período variável de tempo, foi utilizar um Scheduler que roda a cada 30s, onde um serviço que procura sessões em aberto no banco e faz o fechamento das mesmas é chamado.
 
 - **Formato de data númerico** - Procurou-se salvar a data de expiração usando a representação de milisegundos (EPOCH). A aritmética de cálculo é mais simples por ser numérico. E também evita problemas de timezone diferentes entre servidores e clientes (já que é uma unidade de tempo absoluta).
+
+- **Consumo do resultado da votação da fila de mensagens** - Um listener simples escutando na fila do RabbitMQ irá fazer um print simples do resultado da votação no console.

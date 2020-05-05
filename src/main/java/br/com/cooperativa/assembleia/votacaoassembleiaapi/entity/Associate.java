@@ -1,6 +1,13 @@
 package br.com.cooperativa.assembleia.votacaoassembleiaapi.entity;
 
-public class Associate extends AbstractEntity {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+
+public class Associate {
+    @Id
+    protected String id;
+    @Version
+    protected Long version;
     private String name;
     private String cpf;
 
@@ -26,6 +33,10 @@ public class Associate extends AbstractEntity {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override

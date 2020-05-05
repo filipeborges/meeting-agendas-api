@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/associates")
 @Validated
-public class AssociateController extends AbstractController {
+public class AssociateController {
 
     @Autowired
     private AssociateService associateService;
@@ -49,7 +50,9 @@ public class AssociateController extends AbstractController {
     ) {
         AssociateDto newAssociate = associateService.create(associateForm);
         return ResponseEntity
-                .created(buildNewResourceUri(newAssociate.getId()))
+                .created(
+                        URI.create(String.format("/associates/%s", newAssociate.getId()))
+                )
                 .body(newAssociate);
     }
 
@@ -84,8 +87,4 @@ public class AssociateController extends AbstractController {
         return ResponseEntity.ok(associateService.update(associateForm, id));
     }
 
-    @Override
-    public String getResourceBaseUri() {
-        return "/associates";
-    }
 }

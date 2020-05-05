@@ -1,4 +1,7 @@
 spring:
+  rabbitmq:
+    port: 5672
+    addresses: rabbitmq-host
   data:
     mongodb:
       database: meeting-agendas
@@ -11,3 +14,5 @@ app:
   rest-client:
     user-info:
       host: https://user-info.herokuapp.com
+  rabbitmq:
+    queue-name: meeting-agenda-result.queue
